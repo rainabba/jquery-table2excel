@@ -29,30 +29,34 @@
 
 		Plugin.prototype = {
 			init: function () {
-				this.template = "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>";
-				this.tableRows = "";
+				var e = this;
+				e.template = "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><!--[if gte mso 9]><xml>";
+				e.template += "<x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions>";
+				e.template += "<x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>";
+				e.tableRows = "";
 
 				// get contents of table except for exclude
-				$(this.element).find("tr").not(this.settings.exclude).each(function (i,o) {
-					this.tableRows += "<tr>" + $(o).html() + "</tr>";
+				$(e.element).find("tr").not(this.settings.exclude).each(function (i,o) {
+					e.tableRows += "<tr>" + $(o).html() + "</tr>";
 				});
 				this.tableToExcel(this.tableRows, this.settings.name);
 			},
 			tableToExcel: function (table, name) {
-				this.uri = "data:application/vnd.ms-excel;base64,";
-				this.base64 = function (s) {
+				var e = this;
+				e.uri = "data:application/vnd.ms-excel;base64,";
+				e.base64 = function (s) {
 					return window.btoa(unescape(encodeURIComponent(s)));
 				};
-				this.format = function (s, c) {
+				e.format = function (s, c) {
 					return s.replace(/{(\w+)}/g, function (m, p) {
 						return c[p];
 					});
 				};
-				this.ctx = {
+				e.ctx = {
 					worksheet: name || "Worksheet",
 					table: table
 				};
-				window.location.href = this.uri + this.base64(this.format(this.template, this.ctx));
+				window.location.href = e.uri + e.base64(e.format(e.template, e.ctx));
 			}
 		};
 

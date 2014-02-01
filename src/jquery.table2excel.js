@@ -22,15 +22,15 @@
 		Plugin.prototype = {
 			init: function () {
 				var e = this;
-				e.template = "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>";
+				e.template = "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><!--[if gte mso 9]><xml>";
+				e.template += "<x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions>";
+				e.template += "<x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>";
 				e.tableRows = "";
 
 				// get contents of table except for exclude
 				$(e.element).find("tr").not(this.settings.exclude).each(function (i,o) {
-					debugger;
 					e.tableRows += "<tr>" + $(o).html() + "</tr>";
 				});
-				debugger;
 				this.tableToExcel(this.tableRows, this.settings.name);
 			},
 			tableToExcel: function (table, name) {
@@ -48,7 +48,6 @@
 					worksheet: name || "Worksheet",
 					table: table
 				};
-				debugger;
 				window.location.href = e.uri + e.base64(e.format(e.template, e.ctx));
 			}
 		};
