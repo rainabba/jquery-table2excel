@@ -1,0 +1,22 @@
+{
+  "name": "jquery-table2excel",
+  "title": "jQuery table2excel",
+  "description": "jQuery plugin to export an .xls file in browser from an HTML table",
+  "author": "rainabba",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/rainabba/jquery-table2excel.git"
+  },
+  "homepage": "https://github.com/rainabba/jquery-table2excel/",
+  "version": "1.0.0",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.3.2"
+  },
+  "scripts": {
+    "test": "grunt travis --verbose"
+  }
+}
