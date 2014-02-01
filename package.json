@@ -8,7 +8,7 @@
     "url": "http://github.com/rainabba/jquery-table2excel.git"
   },
   "homepage": "https://github.com/rainabba/jquery-table2excel/",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.13",

@@ -1,5 +1,5 @@
 /*
- *  jQuery table2excel - v1.0.0
+ *  jQuery table2excel - v1.0.1
  *  jQuery plugin to export an .xls file in browser from an HTML table
  *  https://github.com/rainabba/jquery-table2excel
  *
