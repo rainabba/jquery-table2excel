@@ -20,9 +20,9 @@
 3. Call the plugin:
 
 	```javascript
-	$("table#table2excel").table2excel({
-		exclude: ".excludeThisClass",
-		name: "Excel Document Name"
+	$("#yourHtmTable").table2excel({
+	    exclude: ".excludeThisClass",
+	    name: "Worksheet Name"
 	});
 	```
 
