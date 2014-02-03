@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Jquery-table2excel by rainabba</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Jquery-table2excel</h1>
+        <h2>jQuery Plugin to export HTML tabled to Excel Spreadsheet Compatible Files</h2>
+        <a href="https://github.com/rainabba/jquery-table2excel" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="jquery-table2excel-plugin-by-rainabba-httpsgithubcomrainabbajquery-table2exceljquery-table2excel" class="anchor" href="#jquery-table2excel-plugin-by-rainabba-httpsgithubcomrainabbajquery-table2exceljquery-table2excel"><span class="octicon octicon-link"></span></a>jQuery table2excel Plugin by Rainabba (<a href="https://github.com/rainabba/jquery-table2excel/jquery-table2excel">https://github.com/rainabba/jquery-table2excel/jquery-table2excel</a>)</h1>
+
+<h1>
+<a name="credit-for-the-core-table-export-code-concept-goes-to-insin-met-on-freenode-in-javascript-and-core-code-inspired-from-httpsgistgithubcominsin1031969" class="anchor" href="#credit-for-the-core-table-export-code-concept-goes-to-insin-met-on-freenode-in-javascript-and-core-code-inspired-from-httpsgistgithubcominsin1031969"><span class="octicon octicon-link"></span></a>Credit for the core table export code concept goes to insin (met on Freenode in #javascript) and core code inspired from <a href="https://gist.github.com/insin/1031969">https://gist.github.com/insin/1031969</a>
+</h1>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<ol>
+<li>
+<p>Include jQuery:</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</li>
+<li>
+<p>Include table2excel plugin's code:</p>
+
+<div class="highlight highlight-html"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"dist/jquery.table2excel.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+</li>
+<li>
+<p>Call the plugin:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">"#yourHtmTable"</span><span class="p">).</span><span class="nx">table2excel</span><span class="p">({</span>
+    <span class="nx">exclude</span><span class="o">:</span> <span class="s2">".excludeThisClass"</span><span class="p">,</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">"Worksheet Name"</span>
+<span class="p">});</span>
+</pre></div>
+</li>
+</ol><h4>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a><a href="https://github.com/rainabba/jquery-table2excel/tree/master/demo">demo/</a>
+</h4>
+
+<p>Contains a simple HTML file to demonstrate your plugin.</p>
+
+<h4>
+<a name="dist" class="anchor" href="#dist"><span class="octicon octicon-link"></span></a><a href="https://github.com/rainabba/jquery-table2excel/tree/master/dist">dist/</a>
+</h4>
+
+<p>This is where the generated files are stored once Grunt runs.</p>
+
+<h4>
+<a name="editorconfig" class="anchor" href="#editorconfig"><span class="octicon octicon-link"></span></a><a href="https://github.com/rainabba/jquery-table2excel/tree/master/.editorconfig">.editorconfig</a>
+</h4>
+
+<p>This file is for unifying the coding style for different editors and IDEs.</p>
+
+<blockquote>
+<p>Check <a href="http://editorconfig.org">editorconfig.org</a> if you haven't heard about this project yet.</p>
+</blockquote>
+
+<h4>
+<a name="jshintrc" class="anchor" href="#jshintrc"><span class="octicon octicon-link"></span></a><a href="https://github.com/rainabba/jquery-table2excel/tree/master/.jshintrc">.jshintrc</a>
+</h4>
+
+<p>List of rules used by JSHint to detect errors and potential problems in JavaScript.</p>
+
+<blockquote>
+<p>Check <a href="http://jshint.com/about/">jshint.com</a> if you haven't heard about this project yet.</p>
+</blockquote>
+
+<h4>
+<a name="travisyml" class="anchor" href="#travisyml"><span class="octicon octicon-link"></span></a><a href="https://github.com/rainabba/jquery-table2excel/tree/master/.travis.yml">.travis.yml</a>
+</h4>
+
+<p>Definitions for continous integration using Travis.</p>
+
+<blockquote>
+<p>Check <a href="http://about.travis-ci.org/">travis-ci.org</a> if you haven't heard about this project yet.</p>
+</blockquote>
+
+<h4>
+<a name="table2exceljqueryjson" class="anchor" href="#table2exceljqueryjson"><span class="octicon octicon-link"></span></a><a href="https://github.com/rainabba/jquery-table2excel/tree/master/table2excel.jquery.json">table2excel.jquery.json</a>
+</h4>
+
+<p>Package manifest file used to publish plugins in jQuery Plugin Registry.</p>
+
+<blockquote>
+<p>Check this <a href="http://plugins.jquery.com/docs/package-manifest/">Package Manifest Guide</a> for more details.</p>
+</blockquote>
+
+<h4>
+<a name="gruntfilejs" class="anchor" href="#gruntfilejs"><span class="octicon octicon-link"></span></a><a href="https://github.com/rainabba/jquery-table2excel/tree/master/Gruntfile.js">Gruntfile.js</a>
+</h4>
+
+<p>Contains all automated tasks using Grunt.</p>
+
+<blockquote>
+<p>Check <a href="http://gruntjs.com">gruntjs.com</a> if you haven't heard about this project yet.</p>
+</blockquote>
+
+<h4>
+<a name="packagejson" class="anchor" href="#packagejson"><span class="octicon octicon-link"></span></a><a href="https://github.com/rainabba/jquery-table2excel/tree/master/package.json">package.json</a>
+</h4>
+
+<p>Specify all dependencies loaded via Node.JS.</p>
+
+<blockquote>
+<p>Check <a href="https://npmjs.org/doc/json.html">NPM</a> for more details.</p>
+</blockquote>
+
+<h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>Check <a href="https://github.com/rainabba/jquery-table2excel/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a></p>
+
+<h2>
+<a name="history" class="anchor" href="#history"><span class="octicon octicon-link"></span></a>History</h2>
+
+<p>Check <a href="https://github.com/rainabba/jquery-table2excel/releases">Release</a> list.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><a href="http://zenorocha.mit-license.org/">MIT License</a></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/rainabba/jquery-table2excel/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/rainabba/jquery-table2excel/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/rainabba/jquery-table2excel"></a> is maintained by <a href="https://github.com/rainabba">rainabba</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
