@@ -95,6 +95,7 @@
             }
             delete e.ctx.table;
 
+            fullTemplate = e.format(fullTemplate, e.ctx)
 
             if (typeof msie != "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
             {
@@ -109,7 +110,7 @@
                 var iframe = document.createElement('iframe');
                     document.body.appendChild(iframe);
                     iframe.contentWindow.document.open();
-                    iframe.contentWindow.document.write(e.format(fullTemplate, e.ctx));
+                    iframe.contentWindow.document.write(fullTemplate);
                     iframe.contentWindow.document.close();
                     
                     //iframe.focus(); crashes IE
@@ -117,7 +118,7 @@
                 }
 
             } else {
-                link = e.uri + e.base64(e.format(fullTemplate, e.ctx));
+                link = e.uri + e.base64(fullTemplate);
                 a = document.createElement("a");
                 a.download = getFileName(e.settings);
                 a.href = link;
