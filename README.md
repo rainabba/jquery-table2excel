@@ -22,7 +22,8 @@
 	```javascript
 	$("#yourHtmTable").table2excel({
 	    exclude: ".excludeThisClass",
-	    name: "Worksheet Name"
+	    name: "Worksheet Name",
+	    filename: "SomeFile" //do not include extension
 	});
 	```
 

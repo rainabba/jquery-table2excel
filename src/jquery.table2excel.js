@@ -50,11 +50,12 @@
 				e.tableRows.push(tempRows);
 			});
 
+
 			e.tableToExcel(e.tableRows, e.settings.name);
 		},
 
 		tableToExcel: function (table, name) {
-			var e = this, fullTemplate="", i;
+			var e = this, fullTemplate="", i, link, a;
 
 			e.uri = "data:application/vnd.ms-excel;base64,";
 			e.base64 = function (s) {
@@ -94,7 +95,12 @@
 			}
 			delete e.ctx.table;
 
-			window.location.href = e.uri + e.base64(e.format(fullTemplate, e.ctx));
+			link = e.uri + e.base64(e.format(fullTemplate, e.ctx));
+			a = document.createElement("a");
+			a.download = ( e.settings.filename ? e.settings.filename : "table2excel") + ".xlsx";
+			a.href = link;
+			a.click();
+
 		}
 	};
 
