@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+	
+	
 	grunt.initConfig({
 
 		// Import package manifest
@@ -48,12 +50,8 @@ module.exports = function(grunt) {
 		},
 
 	});
-
-	grunt.loadNpmTasks("grunt-contrib-concat");
-	grunt.loadNpmTasks("grunt-contrib-jshint");
-	grunt.loadNpmTasks("grunt-contrib-uglify");
-
+	
+	require('load-grunt-tasks')(grunt);
 	grunt.registerTask("default", ["jshint", "concat", "uglify"]);
-	grunt.registerTask("travis", ["jshint"]);
 
 };

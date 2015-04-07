@@ -24,19 +24,21 @@
 	Plugin.prototype = {
 		init: function () {
 			var e = this;
+			
 			e.template = {
-				head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>"
-				,sheet: {
-					head: "<x:ExcelWorksheet><x:Name>" //{worksheet}
-					,tail: "</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>"
-				}
-				,mid: "</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>"
-				,table: {
-					head: "<table>" //{table}
-					,tail: "</table>"
-				}
-				,foot: "</body></html>"
-			}
+				head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
+				sheet: {
+					head: "<x:ExcelWorksheet><x:Name>",
+					tail: "</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>"
+				},
+				mid: "</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>",
+				table: {
+					head: "<table>",
+					tail: "</table>"
+				},
+				foot: "</body></html>"
+			};
+
 			e.tableRows = [];
 
 			// get contents of table except for exclude
@@ -48,11 +50,12 @@
 				e.tableRows.push(tempRows);
 			});
 
-
 			e.tableToExcel(e.tableRows, e.settings.name);
-		},	
+		},
+
 		tableToExcel: function (table, name) {
-			var e = this, fullTemplate="";
+			var e = this, fullTemplate="", i;
+
 			e.uri = "data:application/vnd.ms-excel;base64,";
 			e.base64 = function (s) {
 				return window.btoa(unescape(encodeURIComponent(s)));
@@ -70,7 +73,7 @@
 			fullTemplate= e.template.head;
 			
 			if ( $.isArray(table) ) {
-				for (var i in table) {
+				for (i in table) {
 					//fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
 					fullTemplate += e.template.sheet.head + "Table" + i + "" + e.template.sheet.tail;
 				}
@@ -79,14 +82,14 @@
 			fullTemplate += e.template.mid;
 
 			if ( $.isArray(table) ) {
-				for (var i in table) {
+				for (i in table) {
 					fullTemplate += e.template.table.head + "{table" + i + "}" + e.template.table.tail;
 				}
 			}
 
 			fullTemplate += e.template.foot;
 
-			for (var i in table) {
+			for (i in table) {
 				e.ctx["table" + i] = table[i];
 			}
 			delete e.ctx.table;
@@ -96,14 +99,15 @@
 	};
 
 	$.fn[ pluginName ] = function ( options ) {
-			this.each(function() {
-					if ( !$.data( this, "plugin_" + pluginName ) ) {
-							$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+		var e = this;
+			e.each(function() {
+					if ( !$.data( e, "plugin_" + pluginName ) ) {
+							$.data( e, "plugin_" + pluginName, new Plugin( this, options ) );
 					}
 			});
 
 			// chain jQuery functions
-			return this;
+			return e;
 	};
 
 })( jQuery, window, document );
