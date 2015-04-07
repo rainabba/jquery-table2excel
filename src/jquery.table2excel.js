@@ -95,14 +95,41 @@
 			}
 			delete e.ctx.table;
 
-			link = e.uri + e.base64(e.format(fullTemplate, e.ctx));
-			a = document.createElement("a");
-			a.download = ( e.settings.filename ? e.settings.filename : "table2excel") + ".xlsx";
-			a.href = link;
-			a.click();
+
+	        if (typeof msie != "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+	        {
+	            if (typeof Blob !== "undefined") {
+	                //use blobs if we can
+	                fullTemplate = [fullTemplate];
+	                //convert to array
+	                var blob1 = new Blob(fullTemplate, { type: "text/html" });
+	                window.navigator.msSaveBlob(blob1, getFileName(e.settings) );
+	            } else {
+	                //otherwise use the iframe and save
+	                //requires a blank iframe on page called txtArea1
+	                txtArea1.document.open("text/html", "replace");
+	                txtArea1.document.write(fullTemplate);
+	                txtArea1.document.close();
+	                txtArea1.focus();
+	                sa = txtArea1.document.execCommand("SaveAs", true, getFileName(e.settings) );
+	            }
+
+	        } else {
+	            link = e.uri + e.base64(e.format(fullTemplate, e.ctx));
+				a = document.createElement("a");
+				a.download = getFileName(e.settings);
+				a.href = link;
+				a.click();
+	        }
+			
+			return true;
 
 		}
 	};
+
+	function getFileName(settings) {
+		return ( settings.filename ? settings.filename : "table2excel") + ".xlsx";
+	}
 
 	$.fn[ pluginName ] = function ( options ) {
 		var e = this;
