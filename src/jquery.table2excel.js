@@ -96,7 +96,7 @@
 			delete e.ctx.table;
 
 
-	        if (typeof msie != "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+	        if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
 	        {
 	            if (typeof Blob !== "undefined") {
 	                //use blobs if we can
