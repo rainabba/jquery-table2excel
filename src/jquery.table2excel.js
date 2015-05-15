@@ -117,7 +117,12 @@
                 a = document.createElement("a");
                 a.download = getFileName(e.settings);
                 a.href = link;
+
+                document.body.appendChild(a);
+
                 a.click();
+
+                document.body.removeChild(a);
             }
 
             return true;
