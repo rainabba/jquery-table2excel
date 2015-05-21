@@ -106,7 +106,7 @@
                     //otherwise use the iframe and save
                     //requires a blank iframe on page called txtArea1
                     txtArea1.document.open("text/html", "replace");
-                    txtArea1.document.write(fullTemplate);
+                    txtArea1.document.write(e.format(fullTemplate, e.ctx));
                     txtArea1.document.close();
                     txtArea1.focus();
                     sa = txtArea1.document.execCommand("SaveAs", true, getFileName(e.settings) );
