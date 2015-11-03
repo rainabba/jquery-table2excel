@@ -22,7 +22,7 @@
 			// more objects, storing the result in the first object. The first object
 			// is generally empty as we don't want to alter the default options for
 			// future instances of the plugin
-			// 
+			//
 			this.settings = $.extend( {}, defaults, options );
 			this._defaults = defaults;
 			this._name = pluginName;
@@ -32,7 +32,7 @@
 	Plugin.prototype = {
 		init: function () {
 			var e = this;
-			
+
 			e.template = {
 				head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
 				sheet: {
@@ -58,6 +58,20 @@
 				e.tableRows.push(tempRows);
 			});
 
+			// exclude img tags
+            if(e.settings.exclude_img) {
+                e.tableRows[0] = exclude_img(e.tableRows[0]);
+            }
+
+            // exclude link tags
+            if(e.settings.exclude_links) {
+                e.tableRows[0] = exclude_links(e.tableRows[0]);
+            }
+
+            // exclude input tags
+            if(e.settings.exclude_inputs) {
+                e.tableRows[0] = exclude_inputs(e.tableRows[0])
+            }
 
 			e.tableToExcel(e.tableRows, e.settings.name);
 		},
@@ -78,9 +92,9 @@
 				worksheet: name || "Worksheet",
 				table: table
 			};
-			
+
 			fullTemplate= e.template.head;
-			
+
 			if ( $.isArray(table) ) {
 				for (i in table) {
 					//fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
@@ -129,7 +143,7 @@
 				a.href = link;
 				a.click();
 	        }
-			
+
 			return true;
 
 		}
@@ -137,6 +151,21 @@
 
 	function getFileName(settings) {
 		return ( settings.filename ? settings.filename : "table2excel") + ".xlsx";
+	}
+
+	// Removes all img tags
+	function exclude_img(string) {
+		return string.replace(/<img[^>]*>/gi,"");
+	}
+
+	// Removes all link tags
+	function exclude_links(string) {
+		return string.replace(/<A[^>]*>|<\/A>/g, "");
+	}
+
+	// Removes input params
+	function exclude_inputs(string) {
+		return string.replace(/<input[^>]*>|<\/input>/gi, "");
 	}
 
 	$.fn[ pluginName ] = function ( options ) {
