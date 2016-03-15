@@ -1,3 +1,5 @@
+# DISCLAIMER: This plugin is a hack on a hack. The .xls extension is the only way [some versions] of excel will even open it, and you will get a warning about the contents which can be ignored. The plugin was developed against Chrome and other have contributed code that should allow it to work in Firefox and Safari, but inconsistently since it's a hack that's not well supported anywhere but Chrome. I would not use this in public production personally and it was developed for an Intranet application where users are on Chrome and had known versions of Excel installed and the users were educated about the warning. These users also save-as in Excel so that when the files are distributed, the end-users don't get the warning message.
+
 # jQuery table2excel Plugin by Rainabba (https://github.com/rainabba/jquery-table2excel)
 
 #Credit for the core table export code concept goes to insin (met on Freenode in #javascript) and core code inspired from https://gist.github.com/insin/1031969
