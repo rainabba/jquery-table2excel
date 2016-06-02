@@ -46,7 +46,17 @@
             $(e.element).each( function(i,o) {
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,o) {
-                    tempRows += "<tr>" + $(o).html() + "</tr>";
+                    tempRows += "<tr>";
+                    $(p).find("td").not(e.settings.exclude).each(function (i,q) {
+                        var flag = $(q).find(e.settings.exclude) // does this <td> have something with an exclude class
+                        if(flag.length >= 1) {
+                            tempRows += "<td> </td>" // exclude it!!
+                        } else {
+                            tempRows += "<td>" + $(q).html() + "</td>"
+                        }
+                    })
+                     
+                    tempRows += "</tr>";
                 });
                 e.tableRows.push(tempRows);
             });
