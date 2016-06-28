@@ -47,7 +47,7 @@
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,o) {
                     tempRows += "<tr>";
-                    $(p).find("td").not(e.settings.exclude).each(function (i,q) {
+                    $(o).find("td").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected 
                         var flag = $(q).find(e.settings.exclude) // does this <td> have something with an exclude class
                         if(flag.length >= 1) {
                             tempRows += "<td> </td>" // exclude it!!
@@ -109,10 +109,13 @@
             }
             delete e.ctx.table;
 
-            if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+	    var isIE = /*@cc_on!@*/false || !!document.documentMode; // this works with IE10 and IE11 both :)
+	    if (isIE)
+            //if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // this works ONLY with IE 11!!!
             {
                 if (typeof Blob !== "undefined") {
                     //use blobs if we can
+                    fullTemplate = e.format(fullTemplate, e.ctx); // with this, works with IE
                     fullTemplate = [fullTemplate];
                     //convert to array
                     var blob1 = new Blob(fullTemplate, { type: "text/html" });
