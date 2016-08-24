@@ -2,10 +2,10 @@
 ; (function ($, window, document, undefined) {
     var pluginName = "table2excel",
 
-	defaults = {
-	    exclude: ".noExl",
-	    name: "Table2Excel"
-	};
+    defaults = {
+        exclude: ".noExl",
+        name: "Table2Excel"
+    };
 
     // The actual plugin constructor
     function Plugin(element, options) {
@@ -14,7 +14,7 @@
         // more objects, storing the result in the first object. The first object
         // is generally empty as we don't want to alter the default options for
         // future instances of the plugin
-        // 
+        //
         this.settings = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
@@ -25,8 +25,9 @@
         init: function () {
             var e = this;
 
+            var utf8Heading = "<meta http-equiv=\"content-type\" content=\"application/vnd.ms-excel; charset=UTF-8\">";
             e.template = {
-                head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
+                head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\">" + utf8Heading + "<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
                 sheet: {
                     head: "<x:ExcelWorksheet><x:Name>",
                     tail: "</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>"
@@ -45,16 +46,33 @@
             $(e.element).each(function (i, o) {
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i, o) {
-                    tempRows += "<tr>" + $(o).html() + "</tr>";
+                    tempRows += "<tr>";
+                    $(o).find("td").not(e.settings.exclude).each(function (i, q) { // p did not exist, I corrected 
+                        var flag = $(q).find(e.settings.exclude); // does this <td> have something with an exclude class
+                        if (flag.length >= 1) {
+                            tempRows += "<td> </td>"; // exclude it!!
+                        } else {
+                            var tx = $.trim($(q).html());
+                            if ($.isNumeric(tx) & tx!="")
+                            {
+                                tempRows += "<td>=\"" + tx + "\"</td>";
+
+                            } else {
+                                tempRows += "<td>" + tx + "</td>";
+
+                            }
+                        }
+                    })
+
+                    tempRows += "</tr>";
                 });
                 e.tableRows.push(tempRows);
             });
 
-
-            e.tableToExcel(e.tableRows, e.settings.name);
+            e.tableToExcel(e.tableRows, e.settings.name, e.settings.sheetName);
         },
 
-        tableToExcel: function (table, name) {
+        tableToExcel: function (table, name, sheetName) {
             var e = this, fullTemplate = "", i, link, a;
 
             e.uri = "data:application/vnd.ms-excel;base64,";
@@ -66,9 +84,13 @@
                     return c[p];
                 });
             };
+
+            sheetName = typeof sheetName === "undefined" ? "Sheet" : sheetName;
+
             e.ctx = {
                 worksheet: name || "Worksheet",
-                table: table
+                table: table,
+                sheetName: sheetName,
             };
 
             fullTemplate = e.template.head;
@@ -76,7 +98,7 @@
             if ($.isArray(table)) {
                 for (i in table) {
                     //fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
-                    fullTemplate += e.template.sheet.head + "Table" + i + "" + e.template.sheet.tail;
+                    fullTemplate += e.template.sheet.head + sheetName + i + e.template.sheet.tail;
                 }
             }
 
@@ -95,43 +117,46 @@
             }
             delete e.ctx.table;
 
-            fullTemplate = e.format(fullTemplate, e.ctx)
-
-            if (typeof msie != "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+            var isIE = /*@cc_on!@*/false || !!document.documentMode; // this works with IE10 and IE11 both :)
+            if (isIE)
+                //if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // this works ONLY with IE 11!!!
             {
                 if (typeof Blob !== "undefined") {
                     //use blobs if we can
+                    fullTemplate = e.format(fullTemplate, e.ctx); // with this, works with IE
                     fullTemplate = [fullTemplate];
                     //convert to array
                     var blob1 = new Blob(fullTemplate, { type: "text/html" });
                     window.navigator.msSaveBlob(blob1, getFileName(e.settings));
                 } else {
                     //otherwise use the iframe and save
-                var iframe = document.createElement('iframe');
-                    document.body.appendChild(iframe);
-                    iframe.contentWindow.document.open();
-                    iframe.contentWindow.document.write(fullTemplate);
-                    iframe.contentWindow.document.close();
-                    
-                    //iframe.focus(); crashes IE
-                    sa = iframe.contentWindow.document.execCommand("SaveAs", true, getFileName(e.settings));
+                    //requires a blank iframe on page called txtArea1
+                    txtArea1.document.open("text/html", "replace");
+                    txtArea1.document.write(e.format(fullTemplate, e.ctx));
+                    txtArea1.document.close();
+                    txtArea1.focus();
+                    sa = txtArea1.document.execCommand("SaveAs", true, getFileName(e.settings));
                 }
 
             } else {
-                link = e.uri + e.base64(fullTemplate);
+                link = e.uri + e.base64(e.format(fullTemplate, e.ctx));
                 a = document.createElement("a");
                 a.download = getFileName(e.settings);
                 a.href = link;
+
+                document.body.appendChild(a);
+
                 a.click();
+
+                document.body.removeChild(a);
             }
 
             return true;
-
         }
     };
 
     function getFileName(settings) {
-        return (settings.filename ? settings.filename : "table2excel") + ".xls";
+        return (settings.filename ? settings.filename : "table2excel");
     }
 
     $.fn[pluginName] = function (options) {
