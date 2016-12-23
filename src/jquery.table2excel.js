@@ -47,15 +47,15 @@
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
                     tempRows += "<tr>";
-                    $(o).find("td").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected 
-                        var flag = $(q).find(e.settings.exclude) // does this <td> have something with an exclude class
+                    $(o).find("td").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
+                        var flag = $(q).find(e.settings.exclude); // does this <td> have something with an exclude class
                         if(flag.length >= 1) {
-                            tempRows += "<td> </td>" // exclude it!!
+                            tempRows += "<td> </td>"; // exclude it!!
                         } else {
-                            tempRows += "<td>" + $(q).html() + "</td>"
+                            tempRows += "<td>" + $(q).html() + "</td>";
                         }
-                    })
-                     
+                    });
+
                     tempRows += "</tr>";
                 });
                 e.tableRows.push(tempRows);
@@ -67,10 +67,6 @@
         tableToExcel: function (table, name, sheetName) {
             var e = this, fullTemplate="", i, link, a;
 
-            e.uri = "data:application/vnd.ms-excel;base64,";
-            e.base64 = function (s) {
-                return window.btoa(unescape(encodeURIComponent(s)));
-            };
             e.format = function (s, c) {
                 return s.replace(/{(\w+)}/g, function (m, p) {
                     return c[p];
@@ -82,7 +78,7 @@
             e.ctx = {
                 worksheet: name || "Worksheet",
                 table: table,
-                sheetName: sheetName,
+                sheetName: sheetName
             };
 
             fullTemplate= e.template.head;
@@ -131,7 +127,9 @@
                 }
 
             } else {
-                link = e.uri + e.base64(e.format(fullTemplate, e.ctx));
+                var blob = new Blob([e.format(fullTemplate, e.ctx)], {type: 'application/vnd.ms-excel'});
+                window.URL = window.URL || window.webkitURL;
+                link = window.URL.createObjectURL(blob);
                 a = document.createElement("a");
                 a.download = getFileName(e.settings);
                 a.href = link;
