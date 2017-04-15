@@ -164,11 +164,11 @@
 
     // Removes all img tags
     function exclude_img(string) {
-        var _patt = new RegExp("alt=[\"']?((?:.(?![\"']?\s+(?:\S+)=|[>\"']))+.)[\"']?");
+        var _patt = /(\s+alt\s*=\s*"([^"]*)"|\s+alt\s*=\s*'([^']*)')/i;
         return string.replace(/<img[^>]*>/gi, function myFunction(x){
             var res = _patt.exec(x);
-            if (res !== null && res.length >=1) {
-                return res[1];
+            if (res !== null && res.length >=2) {
+                return res[2];
             } else {
                 return '';
             }
@@ -182,11 +182,11 @@
 
     // Removes input params
     function exclude_inputs(string) {
-        var _patt = new RegExp("value=[\"']?((?:.(?![\"']?\s+(?:\S+)=|[>\"']))+.)[\"']?");
+        var _patt = /(\s+value\s*=\s*"([^"]*)"|\s+value\s*=\s*'([^']*)')/i;
         return string.replace(/<input[^>]*>|<\/input>/gi, function myFunction(x){
             var res = _patt.exec(x);
-            if (res !== null && res.length >=1) {
-                return res[1];
+            if (res !== null && res.length >=2) {
+                return res[2];
             } else {
                 return '';
             }
