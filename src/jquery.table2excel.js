@@ -25,9 +25,9 @@
         init: function () {
             var e = this;
 
-			var utf8Heading = "<meta http-equiv=\"content-type\" content=\"application/vnd.ms-excel; charset=UTF-8\">";
+            var utf8Heading = "<meta http-equiv=\"content-type\" content=\"application/vnd.ms-excel; charset=UTF-8\">";
             e.template = {
-				head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\">" + utf8Heading + "<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
+                head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\">" + utf8Heading + "<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
                 sheet: {
                     head: "<x:ExcelWorksheet><x:Name>",
                     tail: "</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>"
@@ -58,6 +58,20 @@
 
                     tempRows += "</tr>";
                 });
+                // exclude img tags
+                if(e.settings.exclude_img) {
+                    tempRows = exclude_img(tempRows);
+                }
+
+                // exclude link tags
+                if(e.settings.exclude_links) {
+                    tempRows = exclude_links(tempRows);
+                }
+
+                // exclude input tags
+                if(e.settings.exclude_inputs) {
+                    tempRows = exclude_inputs(tempRows)
+                }
                 e.tableRows.push(tempRows);
             });
 
@@ -105,10 +119,9 @@
             }
             delete e.ctx.table;
 
-	    var isIE = /*@cc_on!@*/false || !!document.documentMode; // this works with IE10 and IE11 both :)
-	    if (isIE)
+            var isIE = /*@cc_on!@*/false || !!document.documentMode; // this works with IE10 and IE11 both :)            
             //if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // this works ONLY with IE 11!!!
-            {
+            if (isIE) {
                 if (typeof Blob !== "undefined") {
                     //use blobs if we can
                     fullTemplate = e.format(fullTemplate, e.ctx); // with this, works with IE
@@ -146,7 +159,38 @@
     };
 
     function getFileName(settings) {
-		return ( settings.filename ? settings.filename : "table2excel" );
+        return ( settings.filename ? settings.filename : "table2excel" );
+    }
+
+    // Removes all img tags
+    function exclude_img(string) {
+        var _patt = /(\s+alt\s*=\s*"([^"]*)"|\s+alt\s*=\s*'([^']*)')/i;
+        return string.replace(/<img[^>]*>/gi, function myFunction(x){
+            var res = _patt.exec(x);
+            if (res !== null && res.length >=2) {
+                return res[2];
+            } else {
+                return '';
+            }
+        });
+    }
+
+    // Removes all link tags
+    function exclude_links(string) {
+        return string.replace(/<a[^>]*>|<\/a>/gi, "");
+    }
+
+    // Removes input params
+    function exclude_inputs(string) {
+        var _patt = /(\s+value\s*=\s*"([^"]*)"|\s+value\s*=\s*'([^']*)')/i;
+        return string.replace(/<input[^>]*>|<\/input>/gi, function myFunction(x){
+            var res = _patt.exec(x);
+            if (res !== null && res.length >=2) {
+                return res[2];
+            } else {
+                return '';
+            }
+        });
     }
 
     $.fn[ pluginName ] = function ( options ) {
