@@ -47,7 +47,7 @@
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
                     tempRows += "<tr>";
-                    $(p).find("td").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
+                    $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
                         var flag = $(q).find(e.settings.exclude); // does this <td> have something with an exclude class
                         if(flag.length >= 1) {
                             tempRows += "<td> </td>"; // exclude it!!
