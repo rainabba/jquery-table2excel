@@ -70,7 +70,7 @@
 
                 // exclude input tags
                 if(e.settings.exclude_inputs) {
-                    tempRows = exclude_inputs(tempRows)
+                    tempRows = exclude_inputs(tempRows);
                 }
                 e.tableRows.push(tempRows);
             });
@@ -140,7 +140,7 @@
                 }
 
             } else {
-                var blob = new Blob([e.format(fullTemplate, e.ctx)], {type: 'application/vnd.ms-excel'});
+                var blob = new Blob([e.format(fullTemplate, e.ctx)], {type: "application/vnd.ms-excel"});
                 window.URL = window.URL || window.webkitURL;
                 link = window.URL.createObjectURL(blob);
                 a = document.createElement("a");
@@ -170,7 +170,7 @@
             if (res !== null && res.length >=2) {
                 return res[2];
             } else {
-                return '';
+                return "";
             }
         });
     }
@@ -188,7 +188,7 @@
             if (res !== null && res.length >=2) {
                 return res[2];
             } else {
-                return '';
+                return "";
             }
         });
     }
