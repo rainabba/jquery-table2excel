@@ -6,29 +6,42 @@
 
 This plugin is a hack on a hack. The .xls extension is the only way [some versions] of excel will even open it, and you will get a warning about the contents which can be ignored. The plugin was developed against Chrome and other have contributed code that should allow it to work in Firefox and Safari, but inconsistently since it's a hack that's not well supported anywhere but Chrome. I would not use this in public production personally and it was developed for an Intranet application where users are on Chrome and had known versions of Excel installed and the users were educated about the warning. These users also save-as in Excel so that when the files are distributed, the end-users don't get the warning message.
 
-## Usage
+## Install - Bower
 
-1. Include jQuery:
+Install `bower` globally
+```sh
+npm install -g bower
+```
 
-	```html
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-	```
+Install jquery-table2excel and dependencies
+```
+bower install jquery-table2excel --save
+```
 
-2. Include table2excel plugin's code:
+Include jquery and table2excel in your page
+```html
+<script src="bower_components\jquery\dist\jquery.min.js"></script>
+<script src="bower_components\jquery-table2excel\dist\jquery.table2excel.min.js"></script>
+```
 
-	```html
-	<script src="dist/jquery.table2excel.min.js"></script>
-	```
 
-3. Call the plugin:
+## Install - Legacy
 
-	```javascript
-	$("#yourHtmTable").table2excel({
-	    exclude: ".excludeThisClass",
-	    name: "Worksheet Name",
-	    filename: "SomeFile" //do not include extension
-	});
-	```
+Include jQuery and table2excel plugin:
+```html
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+```
+
+
+## Using the plugin
+```javascript
+$("#yourHtmTable").table2excel({
+    exclude: ".excludeThisClass",
+    name: "Worksheet Name",
+    filename: "SomeFile" //do not include extension
+});
+```
 
 #### [demo/](https://github.com/rainabba/jquery-table2excel/tree/master/demo)
 
