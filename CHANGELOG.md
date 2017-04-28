@@ -3,3 +3,4 @@
 Features:
 	- Include td and th
 	- Update dev dependencies and CONTRIBUTING.md
+	- Cleanup repo tags/releases
