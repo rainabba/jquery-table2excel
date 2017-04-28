@@ -1,18 +1,21 @@
 {
-	"name": "jquery-table2excel",
-	"version": "1.0.4",
-	"homepage": "https://github.com/jquery-table2excel/",
-	"authors": [
-		"rainabba <rainabba@gmail.com>"
-	],
-	"description": "jQuery plugin to export an .xls file in browser from an HTML table.",
-	"main": "src/jquery.table2excel.js",
-	"keywords": [
-		"jquery",
-		"plugin",
-		"table2excel",
-		"jquery-plugin",
-		"jquery-table2excel"
-	],
-	"license": "MIT"
+  "name": "jquery-table2excel",
+  "version": "1.1.1",
+  "homepage": "https://github.com/jquery-table2excel/",
+  "authors": [
+    "rainabba <rainabba@gmail.com>"
+  ],
+  "description": "jQuery plugin to export an .xls file in browser from an HTML table.",
+  "main": "src/jquery.table2excel.js",
+  "keywords": [
+    "jquery",
+    "plugin",
+    "table2excel",
+    "jquery-plugin",
+    "jquery-table2excel"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "2.x.x"
+  }
 }
