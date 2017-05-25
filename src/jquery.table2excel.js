@@ -12,7 +12,12 @@
 
     defaults = {
         exclude: ".noExl",
-                name: "Table2Excel"
+        name: "Table2Excel",
+        filename: "table2excel",
+        fileext: ".xls",
+        exclude_img: true,
+        exclude_links: true,
+        exclude_inputs: true
     };
 
     // The actual plugin constructor
@@ -58,22 +63,24 @@
                     tempRows += "<tr>";
                     $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
                         
-                        var rows = $(this).attr("rowspan");
-                        var cols = $(this).attr("colspan");
+                        var rc = {
+                            rows: $(this).attr("rowspan"),
+                            cols: $(this).attr("colspan"),
+                            flag: $(q).find(e.settings.exclude)
+                        };
                         
-                        var flag = $(q).find(e.settings.exclude); // does this <td> have something with an exclude class
-                        if(flag.length >= 1) {
+                        if( rc.flag.length > 0 ) {
                             tempRows += "<td> </td>"; // exclude it!!
                         } else {
-                            if(rows == undefined & cols == undefined) {
+                            if( rc.rows  & rc.cols ) {
                                 tempRows += "<td>" + $(q).html() + "</td>";
                             } else {
                                 tempRows += "<td";
-                                if(rows > 0) {
-                                    tempRows += " rowspan=\'" + rows + "\' ";
+                                if( rc.rows > 0) {
+                                    tempRows += " rowspan=\'" + rc.rows + "\' ";
                                 }
-                                if(cols > 0) {
-                                    tempRows += " colspan=\'" + cols + "\' ";
+                                if( rc.cols > 0) {
+                                    tempRows += " colspan=\'" + rc.cols + "\' ";
                                 }
                                 tempRows += "/>" + $(q).html() + "</td>";
                             }

@@ -3,7 +3,7 @@
 	<head>
 		<title>jQuery Boilerplate</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-		<script src="../dist/jquery.table2excel.min.js"></script>
+		<script src="../dist/jquery.table2excel.js"></script>
 	</head>
 	<body>
 		<table class="table2excel" data-tableName="Test Table 1">
@@ -44,7 +44,7 @@
 				$(".table2excel").table2excel({
 					exclude: ".noExl",
 					name: "Excel Document Name",
-					filename: "myFileName",
+					filename: "myFileName" + new Date().toISOString().replace(/[\-\:\.]/g, ""),
 					fileext: ".xls",
 					exclude_img: true,
 					exclude_links: true,
