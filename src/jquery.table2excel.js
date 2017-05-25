@@ -1,3 +1,11 @@
+/*
+ *  jQuery table2excel - v1.1.1
+ *  jQuery plugin to export an .xls file in browser from an HTML table
+ *  https://github.com/rainabba/jquery-table2excel
+ *
+ *  Made by rainabba
+ *  Under MIT License
+ */
 //table2excel.js
 ;(function ( $, window, document, undefined ) {
     var pluginName = "table2excel",
@@ -46,17 +54,35 @@
             $(e.element).each( function(i,o) {
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
+                    
                     tempRows += "<tr>";
                     $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
+                        
+                        var rows = $(this).attr("rowspan");
+                        var cols = $(this).attr("colspan");
+                        
                         var flag = $(q).find(e.settings.exclude); // does this <td> have something with an exclude class
                         if(flag.length >= 1) {
                             tempRows += "<td> </td>"; // exclude it!!
                         } else {
-                            tempRows += "<td>" + $(q).html() + "</td>";
+                            if(rows == undefined & cols == undefined) {
+                                tempRows += "<td>" + $(q).html() + "</td>";
+                            } else {
+                                tempRows += "<td";
+                                if(rows > 0) {
+                                    tempRows += " rowspan=\'" + rows + "\' ";
+                                }
+                                if(cols > 0) {
+                                    tempRows += " colspan=\'" + cols + "\' ";
+                                }
+                                tempRows += "/>" + $(q).html() + "</td>";
+                            }
                         }
                     });
 
                     tempRows += "</tr>";
+                    console.log(tempRows);
+                    
                 });
                 // exclude img tags
                 if(e.settings.exclude_img) {
