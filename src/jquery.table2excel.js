@@ -73,7 +73,7 @@
                             tempRows += "<td> </td>"; // exclude it!!
                         } else {
                             if( rc.rows  & rc.cols ) {
-                                tempRows += "<td>" + $(q).html() + "</td>";
+                                tempRows += "<td  rowspan=\'" + rc.rows + "\'  colspan=\'" + rc.cols + "\' >" + $(q).html() + "</td>";
                             } else {
                                 tempRows += "<td";
                                 if( rc.rows > 0) {
