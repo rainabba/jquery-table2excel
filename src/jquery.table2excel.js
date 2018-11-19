@@ -72,18 +72,14 @@
                         if( rc.flag.length > 0 ) {
                             tempRows += "<td> </td>"; // exclude it!!
                         } else {
-                            if( rc.rows  & rc.cols ) {
-                                tempRows += "<td>" + $(q).html() + "</td>";
-                            } else {
-                                tempRows += "<td";
-                                if( rc.rows > 0) {
-                                    tempRows += " rowspan=\'" + rc.rows + "\' ";
-                                }
-                                if( rc.cols > 0) {
-                                    tempRows += " colspan=\'" + rc.cols + "\' ";
-                                }
-                                tempRows += "/>" + $(q).html() + "</td>";
+                            tempRows += "<td";
+                            if( rc.rows > 0) {
+                                tempRows += " rowspan=\'" + rc.rows + "\' ";
                             }
+                            if( rc.cols > 0) {
+                                tempRows += " colspan=\'" + rc.cols + "\' ";
+                            }
+                            tempRows += "/>" + $(q).html() + "</td>";
                         }
                     });
 
