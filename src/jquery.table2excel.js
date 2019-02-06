@@ -127,18 +127,18 @@
             fullTemplate= e.template.head;
 
             if ( $.isArray(table) ) {
-                for (i in table) {
+                 Object.keys(table).forEach(function(i){
                       //fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
                       fullTemplate += e.template.sheet.head + sheetName + i + e.template.sheet.tail;
-                }
+                })
             }
 
             fullTemplate += e.template.mid;
 
             if ( $.isArray(table) ) {
-                for (i in table) {
+                 Object.keys(table).forEach(function(i){
                     fullTemplate += e.template.table.head + "{table" + i + "}" + e.template.table.tail;
-                }
+                })
             }
 
             fullTemplate += e.template.foot;
