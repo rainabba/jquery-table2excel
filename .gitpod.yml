@@ -1,0 +1,3 @@
+tasks:
+  - command: "yarn install && yarn run test"
+

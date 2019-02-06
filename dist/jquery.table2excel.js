@@ -67,37 +67,32 @@
             $(e.element).each( function(i,o) {
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
-                    
+
                     tempRows += "<tr>";
                     $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
-                        
+
                         var rc = {
                             rows: $(this).attr("rowspan"),
                             cols: $(this).attr("colspan"),
                             flag: $(q).find(e.settings.exclude)
                         };
-                        
+
                         if( rc.flag.length > 0 ) {
                             tempRows += "<td> </td>"; // exclude it!!
                         } else {
-                            if( rc.rows  & rc.cols ) {
-                                tempRows += "<td>" + $(q).html() + "</td>";
-                            } else {
-                                tempRows += "<td";
-                                if( rc.rows > 0) {
-                                    tempRows += " rowspan=\'" + rc.rows + "\' ";
-                                }
-                                if( rc.cols > 0) {
-                                    tempRows += " colspan=\'" + rc.cols + "\' ";
-                                }
-                                tempRows += "/>" + $(q).html() + "</td>";
+                            tempRows += "<td";
+                            if( rc.rows > 0) {
+                                tempRows += " rowspan=\'" + rc.rows + "\' ";
                             }
+                            if( rc.cols > 0) {
+                                tempRows += " colspan=\'" + rc.cols + "\' ";
+                            }
+                            tempRows += "/>" + $(q).html() + "</td>";
                         }
                     });
 
                     tempRows += "</tr>";
-                    console.log(tempRows);
-                    
+
                 });
                 // exclude img tags
                 if(e.settings.exclude_img) {
@@ -139,18 +134,18 @@
             fullTemplate= e.template.head;
 
             if ( $.isArray(table) ) {
-                for (i in table) {
+                 Object.keys(table).forEach(function(i){
                       //fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
                       fullTemplate += e.template.sheet.head + sheetName + i + e.template.sheet.tail;
-                }
+                });
             }
 
             fullTemplate += e.template.mid;
 
             if ( $.isArray(table) ) {
-                for (i in table) {
+                 Object.keys(table).forEach(function(i){
                     fullTemplate += e.template.table.head + "{table" + i + "}" + e.template.table.tail;
-                }
+                });
             }
 
             fullTemplate += e.template.foot;
@@ -160,7 +155,7 @@
             }
             delete e.ctx.table;
 
-            var isIE = /*@cc_on!@*/false || !!document.documentMode; // this works with IE10 and IE11 both :)            
+            var isIE = /*@cc_on!@*/false || !!document.documentMode; // this works with IE10 and IE11 both :)
             //if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // this works ONLY with IE 11!!!
             if (isIE) {
                 if (typeof Blob !== "undefined") {
