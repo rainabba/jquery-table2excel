@@ -1,4 +1,4 @@
-## 1.1.2 (2018-02-06)
+## 1.1.2 (2019-02-06)
 
 Changes:
 	- Updated dependencies
