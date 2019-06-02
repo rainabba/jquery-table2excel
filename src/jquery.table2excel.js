@@ -79,7 +79,7 @@
                             if( rc.cols > 0) {
                                 tempRows += " colspan=\'" + rc.cols + "\' ";
                             }
-                            tempRows += "/>" + $(q).html() + "</td>";
+                            tempRows += ">" + $(q).html() + "</td>";
                         }
                     });
 
