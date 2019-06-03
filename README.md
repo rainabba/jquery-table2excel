@@ -1,4 +1,4 @@
-# jQuery table2excel Plugin by Rainabba (https://github.com/rainabba/jquery-table2excel)
+# jQuery table2excel Plugin (https://github.com/rainabba/jquery-table2excel)
 
 #Credit for the core table export code concept goes to insin (met on Freenode in #javascript) and core code inspired from https://gist.github.com/insin/1031969
 
