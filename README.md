@@ -44,7 +44,8 @@ Include jQuery and table2excel plugin:
 $("#yourHtmTable").table2excel({
     exclude: ".excludeThisClass",
     name: "Worksheet Name",
-    filename: "SomeFile" //do not include extension
+    filename: "SomeFile.xls", // do include extension
+    preserveColors: false // set to true if you want background colors and font colors preserved
 });
 ```
 

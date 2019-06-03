@@ -1,5 +1,5 @@
 /*
- *  jQuery table2excel - v1.1.1
+ *  jQuery table2excel - v1.1.2
  *  jQuery plugin to export an .xls file in browser from an HTML table
  *  https://github.com/rainabba/jquery-table2excel
  *
@@ -7,7 +7,7 @@
  *  Under MIT License
  */
 //table2excel.js
-;(function ( $, window, document, undefined ) {
+(function ( $, window, document, undefined ) {
     var pluginName = "table2excel",
 
     defaults = {
@@ -17,7 +17,8 @@
         fileext: ".xls",
         exclude_img: true,
         exclude_links: true,
-        exclude_inputs: true
+        exclude_inputs: true,
+        preserveColors: false
     };
 
     // The actual plugin constructor
@@ -54,14 +55,41 @@
             };
 
             e.tableRows = [];
+	
+			// Styling variables
+			var additionalStyles = "";
+			var compStyle = null;
 
             // get contents of table except for exclude
             $(e.element).each( function(i,o) {
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
+					
+					// Reset for this row
+					additionalStyles = "";
+					
+					// Preserve background and text colors on the row
+					if(e.settings.preserveColors){
+						compStyle = getComputedStyle(p);
+						additionalStyles += (compStyle && compStyle.backgroundColor ? "background-color: " + compStyle.backgroundColor + ";" : "");
+						additionalStyles += (compStyle && compStyle.color ? "color: " + compStyle.color + ";" : "");
+					}
 
-                    tempRows += "<tr>";
+					// Create HTML for Row
+                    tempRows += "<tr style='" + additionalStyles + "'>";
+                    
+                    // Loop through each TH and TD
                     $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
+						
+						// Reset for this column
+						additionalStyles = "";
+						
+						// Preserve background and text colors on the row
+						if(e.settings.preserveColors){
+							compStyle = getComputedStyle(q);
+							additionalStyles += (compStyle && compStyle.backgroundColor ? "background-color: " + compStyle.backgroundColor + ";" : "");
+							additionalStyles += (compStyle && compStyle.color ? "color: " + compStyle.color + ";" : "");
+						}
 
                         var rc = {
                             rows: $(this).attr("rowspan"),
@@ -74,12 +102,15 @@
                         } else {
                             tempRows += "<td";
                             if( rc.rows > 0) {
-                                tempRows += " rowspan=\'" + rc.rows + "\' ";
+                                tempRows += " rowspan='" + rc.rows + "' ";
                             }
                             if( rc.cols > 0) {
-                                tempRows += " colspan=\'" + rc.cols + "\' ";
+                                tempRows += " colspan='" + rc.cols + "' ";
                             }
-                            tempRows += "/>" + $(q).html() + "</td>";
+                            if(additionalStyles){
+								tempRows += " style='" + additionalStyles + "'";
+							}
+                            tempRows += ">" + $(q).html() + "</td>";
                         }
                     });
 
@@ -147,7 +178,7 @@
             }
             delete e.ctx.table;
 
-            var isIE = /*@cc_on!@*/false || !!document.documentMode; // this works with IE10 and IE11 both :)
+            var isIE = navigator.appVersion.indexOf("MSIE 10") !== -1 || (navigator.userAgent.indexOf("Trident") !== -1 && navigator.userAgent.indexOf("rv:11") !== -1); // this works with IE10 and IE11 both :)
             //if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // this works ONLY with IE 11!!!
             if (isIE) {
                 if (typeof Blob !== "undefined") {
