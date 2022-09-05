@@ -55,7 +55,7 @@
             };
 
             e.tableRows = [];
-	
+
 			// Styling variables
 			var additionalStyles = "";
 			var compStyle = null;
@@ -64,10 +64,10 @@
             $(e.element).each( function(i,o) {
                 var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
-					
+
 					// Reset for this row
 					additionalStyles = "";
-					
+
 					// Preserve background and text colors on the row
 					if(e.settings.preserveColors){
 						compStyle = getComputedStyle(p);
@@ -77,13 +77,13 @@
 
 					// Create HTML for Row
                     tempRows += "<tr style='" + additionalStyles + "'>";
-                    
+
                     // Loop through each TH and TD
                     $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
-						
+
 						// Reset for this column
 						additionalStyles = "";
-						
+
 						// Preserve background and text colors on the row
 						if(e.settings.preserveColors){
 							compStyle = getComputedStyle(q);
@@ -199,18 +199,17 @@
                 }
 
             } else {
-                var blob = new Blob([e.format(fullTemplate, e.ctx)], {type: "application/vnd.ms-excel"});
-                window.URL = window.URL || window.webkitURL;
-                link = window.URL.createObjectURL(blob);
-                a = document.createElement("a");
-                a.download = getFileName(e.settings);
-                a.href = link;
-
-                document.body.appendChild(a);
-
-                a.click();
-
-                document.body.removeChild(a);
+				var blob = new Blob([e.format(fullTemplate, e.ctx)], { type: "application/vnd.ms-excel" } );
+				var reader = new FileReader();
+				var popup = window.open();
+				reader.onload = function() {
+					var link = document.createElement('a');
+					link.setAttribute('href', reader.result);
+					link.setAttribute('download', getFileName(e.settings));
+					popup.document.body.appendChild(link);
+					link.click();
+				}
+				reader.readAsDataURL(blob);
             }
 
             return true;
