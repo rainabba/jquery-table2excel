@@ -54,7 +54,7 @@
         return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
             "<workbook xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">" +
             "<sheets>" +
-            "<sheet name=\"" + (sheetName || "Sheet1") + "\" sheetId=\"1\" r:id=\"rId1\"/>" +
+            "<sheet name=\"" + escapeXML(sheetName || "Sheet1") + "\" sheetId=\"1\" r:id=\"rId1\"/>" +
             "</sheets>" +
             "</workbook>";
     }
@@ -312,11 +312,8 @@
             
             // Check if JSZip is available
             if (typeof JSZip === "undefined") {
-                console.error("JSZip library is required for XLSX export. Falling back to XLS format.");
-                // Fall back to XLS
-                e.settings.borders = false;
-                e.settings.excelFormat = "xls";
-                e.init();
+                console.error("JSZip library is required for XLSX export. Please include JSZip before using the borders feature.");
+                alert("JSZip library is required for XLSX export with borders. Please include the JSZip library on your page.");
                 return;
             }
 
