@@ -18,8 +18,123 @@
         exclude_img: true,
         exclude_links: true,
         exclude_inputs: true,
-        preserveColors: false
+        preserveColors: false,
+        borders: false,
+        excelFormat: "xls" // "xls" or "xlsx"
     };
+
+    // Helper functions for XLSX generation
+    function generateContentTypesXML() {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+            "<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">" +
+            "<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>" +
+            "<Default Extension=\"xml\" ContentType=\"application/xml\"/>" +
+            "<Override PartName=\"/xl/workbook.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml\"/>" +
+            "<Override PartName=\"/xl/worksheets/sheet1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>" +
+            "<Override PartName=\"/xl/styles.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml\"/>" +
+            "</Types>";
+    }
+
+    function generateRelsXML() {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">" +
+            "<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" Target=\"xl/workbook.xml\"/>" +
+            "</Relationships>";
+    }
+
+    function generateWorkbookXML(sheetName) {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+            "<workbook xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">" +
+            "<sheets>" +
+            "<sheet name=\"" + (sheetName || "Sheet1") + "\" sheetId=\"1\" r:id=\"rId1\"/>" +
+            "</sheets>" +
+            "</workbook>";
+    }
+
+    function generateWorkbookRelsXML() {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">" +
+            "<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet\" Target=\"worksheets/sheet1.xml\"/>" +
+            "<Relationship Id=\"rId2\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles\" Target=\"styles.xml\"/>" +
+            "</Relationships>";
+    }
+
+    function generateStylesXML(withBorders) {
+        var borderDefinition = withBorders ?
+            "<border>" +
+            "<left style=\"thin\"><color rgb=\"FF000000\"/></left>" +
+            "<right style=\"thin\"><color rgb=\"FF000000\"/></right>" +
+            "<top style=\"thin\"><color rgb=\"FF000000\"/></top>" +
+            "<bottom style=\"thin\"><color rgb=\"FF000000\"/></bottom>" +
+            "</border>" :
+            "<border><left/><right/><top/><bottom/></border>";
+
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+            "<styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">" +
+            "<fonts count=\"1\"><font><sz val=\"11\"/><name val=\"Calibri\"/></font></fonts>" +
+            "<fills count=\"2\">" +
+            "<fill><patternFill patternType=\"none\"/></fill>" +
+            "<fill><patternFill patternType=\"gray125\"/></fill>" +
+            "</fills>" +
+            "<borders count=\"2\">" +
+            "<border><left/><right/><top/><bottom/></border>" +
+            borderDefinition +
+            "</borders>" +
+            "<cellXfs count=\"2\">" +
+            "<xf borderId=\"0\" fillId=\"0\" fontId=\"0\" numFmtId=\"0\"/>" +
+            "<xf borderId=\"" + (withBorders ? "1" : "0") + "\" fillId=\"0\" fontId=\"0\" numFmtId=\"0\"" + (withBorders ? " applyBorder=\"1\"" : "") + "/>" +
+            "</cellXfs>" +
+            "</styleSheet>";
+    }
+
+    function escapeXML(str) {
+        if (str == null) {
+            return "";
+        }
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&apos;");
+    }
+
+    function generateWorksheetXML(tableData, withBorders) {
+        var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+            "<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">" +
+            "<sheetData>";
+
+        var styleIndex = withBorders ? "1" : "0";
+
+        for (var rowIndex = 0; rowIndex < tableData.length; rowIndex++) {
+            var row = tableData[rowIndex];
+            xml += "<row r=\"" + (rowIndex + 1) + "\">";
+
+            for (var colIndex = 0; colIndex < row.length; colIndex++) {
+                var cellRef = columnToLetter(colIndex) + (rowIndex + 1);
+                var cellValue = escapeXML(row[colIndex]);
+
+                xml += "<c r=\"" + cellRef + "\" s=\"" + styleIndex + "\" t=\"inlineStr\">" +
+                    "<is><t>" + cellValue + "</t></is>" +
+                    "</c>";
+            }
+
+            xml += "</row>";
+        }
+
+        xml += "</sheetData></worksheet>";
+        return xml;
+    }
+
+    function columnToLetter(column) {
+        var temp, letter = "";
+        while (column >= 0) {
+            temp = column % 26;
+            letter = String.fromCharCode(temp + 65) + letter;
+            column = Math.floor(column / 26) - 1;
+        }
+        return letter;
+    }
 
     // The actual plugin constructor
     function Plugin ( element, options ) {
@@ -39,102 +154,192 @@
         init: function () {
             var e = this;
 
-            var utf8Heading = "<meta http-equiv=\"content-type\" content=\"application/vnd.ms-excel; charset=UTF-8\">";
-            e.template = {
-                head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\">" + utf8Heading + "<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
-                sheet: {
-                    head: "<x:ExcelWorksheet><x:Name>",
-                    tail: "</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>"
-                },
-                mid: "</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>",
-                table: {
-                    head: "<table>",
-                    tail: "</table>"
-                },
-                foot: "</body></html>"
-            };
+            // Determine if we should use XLSX format (when borders are enabled or explicitly requested)
+            var useXlsx = e.settings.borders || e.settings.excelFormat === "xlsx";
+            
+            if (useXlsx) {
+                // Extract table data as array for XLSX export
+                e.extractTableDataForXlsx();
+            } else {
+                // Use legacy XLS export
+                var utf8Heading = "<meta http-equiv=\"content-type\" content=\"application/vnd.ms-excel; charset=UTF-8\">";
+                e.template = {
+                    head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\">" + utf8Heading + "<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
+                    sheet: {
+                        head: "<x:ExcelWorksheet><x:Name>",
+                        tail: "</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>"
+                    },
+                    mid: "</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>",
+                    table: {
+                        head: "<table>",
+                        tail: "</table>"
+                    },
+                    foot: "</body></html>"
+                };
 
-            e.tableRows = [];
-	
-			// Styling variables
-			var additionalStyles = "";
-			var compStyle = null;
+                e.tableRows = [];
+        
+                // Styling variables
+                var additionalStyles = "";
+                var compStyle = null;
+
+                // get contents of table except for exclude
+                $(e.element).each( function(i,o) {
+                    var tempRows = "";
+                    $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
+                        
+                        // Reset for this row
+                        additionalStyles = "";
+                        
+                        // Preserve background and text colors on the row
+                        if(e.settings.preserveColors){
+                            compStyle = getComputedStyle(p);
+                            additionalStyles += (compStyle && compStyle.backgroundColor ? "background-color: " + compStyle.backgroundColor + ";" : "");
+                            additionalStyles += (compStyle && compStyle.color ? "color: " + compStyle.color + ";" : "");
+                        }
+
+                        // Create HTML for Row
+                        tempRows += "<tr style='" + additionalStyles + "'>";
+                        
+                        // Loop through each TH and TD
+                        $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
+                            
+                            // Reset for this column
+                            additionalStyles = "";
+                            
+                            // Preserve background and text colors on the row
+                            if(e.settings.preserveColors){
+                                compStyle = getComputedStyle(q);
+                                additionalStyles += (compStyle && compStyle.backgroundColor ? "background-color: " + compStyle.backgroundColor + ";" : "");
+                                additionalStyles += (compStyle && compStyle.color ? "color: " + compStyle.color + ";" : "");
+                            }
+
+                            var rc = {
+                                rows: $(this).attr("rowspan"),
+                                cols: $(this).attr("colspan"),
+                                flag: $(q).find(e.settings.exclude)
+                            };
+
+                            if( rc.flag.length > 0 ) {
+                                tempRows += "<td> </td>"; // exclude it!!
+                            } else {
+                                tempRows += "<td";
+                                if( rc.rows > 0) {
+                                    tempRows += " rowspan='" + rc.rows + "' ";
+                                }
+                                if( rc.cols > 0) {
+                                    tempRows += " colspan='" + rc.cols + "' ";
+                                }
+                                if(additionalStyles){
+                                    tempRows += " style='" + additionalStyles + "'";
+                                }
+                                tempRows += ">" + $(q).html() + "</td>";
+                            }
+                        });
+
+                        tempRows += "</tr>";
+
+                    });
+                    // exclude img tags
+                    if(e.settings.exclude_img) {
+                        tempRows = exclude_img(tempRows);
+                    }
+
+                    // exclude link tags
+                    if(e.settings.exclude_links) {
+                        tempRows = exclude_links(tempRows);
+                    }
+
+                    // exclude input tags
+                    if(e.settings.exclude_inputs) {
+                        tempRows = exclude_inputs(tempRows);
+                    }
+                    e.tableRows.push(tempRows);
+                });
+
+                e.tableToExcel(e.tableRows, e.settings.name, e.settings.sheetName);
+            }
+        },
+
+        extractTableDataForXlsx: function() {
+            var e = this;
+            var tableData = [];
 
             // get contents of table except for exclude
             $(e.element).each( function(i,o) {
-                var tempRows = "";
                 $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
-					
-					// Reset for this row
-					additionalStyles = "";
-					
-					// Preserve background and text colors on the row
-					if(e.settings.preserveColors){
-						compStyle = getComputedStyle(p);
-						additionalStyles += (compStyle && compStyle.backgroundColor ? "background-color: " + compStyle.backgroundColor + ";" : "");
-						additionalStyles += (compStyle && compStyle.color ? "color: " + compStyle.color + ";" : "");
-					}
-
-					// Create HTML for Row
-                    tempRows += "<tr style='" + additionalStyles + "'>";
+                    var rowData = [];
                     
                     // Loop through each TH and TD
-                    $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
-						
-						// Reset for this column
-						additionalStyles = "";
-						
-						// Preserve background and text colors on the row
-						if(e.settings.preserveColors){
-							compStyle = getComputedStyle(q);
-							additionalStyles += (compStyle && compStyle.backgroundColor ? "background-color: " + compStyle.backgroundColor + ";" : "");
-							additionalStyles += (compStyle && compStyle.color ? "color: " + compStyle.color + ";" : "");
-						}
-
+                    $(p).find("td,th").not(e.settings.exclude).each(function (i,q) {
                         var rc = {
-                            rows: $(this).attr("rowspan"),
-                            cols: $(this).attr("colspan"),
                             flag: $(q).find(e.settings.exclude)
                         };
 
                         if( rc.flag.length > 0 ) {
-                            tempRows += "<td> </td>"; // exclude it!!
+                            rowData.push(" "); // exclude it!!
                         } else {
-                            tempRows += "<td";
-                            if( rc.rows > 0) {
-                                tempRows += " rowspan='" + rc.rows + "' ";
+                            var cellText = $(q).text();
+                            
+                            // exclude img tags
+                            if(e.settings.exclude_img) {
+                                cellText = cellText; // text() already excludes img
                             }
-                            if( rc.cols > 0) {
-                                tempRows += " colspan='" + rc.cols + "' ";
-                            }
-                            if(additionalStyles){
-								tempRows += " style='" + additionalStyles + "'";
-							}
-                            tempRows += ">" + $(q).html() + "</td>";
+                            
+                            rowData.push(cellText);
                         }
                     });
 
-                    tempRows += "</tr>";
-
+                    if (rowData.length > 0) {
+                        tableData.push(rowData);
+                    }
                 });
-                // exclude img tags
-                if(e.settings.exclude_img) {
-                    tempRows = exclude_img(tempRows);
-                }
-
-                // exclude link tags
-                if(e.settings.exclude_links) {
-                    tempRows = exclude_links(tempRows);
-                }
-
-                // exclude input tags
-                if(e.settings.exclude_inputs) {
-                    tempRows = exclude_inputs(tempRows);
-                }
-                e.tableRows.push(tempRows);
             });
 
-            e.tableToExcel(e.tableRows, e.settings.name, e.settings.sheetName);
+            e.exportToXlsx(tableData);
+        },
+
+        exportToXlsx: function(tableData) {
+            var e = this;
+            
+            // Check if JSZip is available
+            if (typeof JSZip === "undefined") {
+                console.error("JSZip library is required for XLSX export. Falling back to XLS format.");
+                // Fall back to XLS
+                e.settings.borders = false;
+                e.settings.excelFormat = "xls";
+                e.init();
+                return;
+            }
+
+            var zip = new JSZip();
+            
+            // Build the OpenXML structure
+            zip.file("[Content_Types].xml", generateContentTypesXML());
+            zip.file("_rels/.rels", generateRelsXML());
+            zip.file("xl/workbook.xml", generateWorkbookXML(e.settings.sheetName || e.settings.name));
+            zip.file("xl/_rels/workbook.xml.rels", generateWorkbookRelsXML());
+            zip.file("xl/styles.xml", generateStylesXML(e.settings.borders));
+            zip.file("xl/worksheets/sheet1.xml", generateWorksheetXML(tableData, e.settings.borders));
+
+            // Generate and download the file
+            zip.generateAsync({ type: "blob" }).then(function(blob) {
+                var filename = getFileName(e.settings);
+                
+                // Ensure .xlsx extension
+                if (!filename.toLowerCase().endsWith(".xlsx")) {
+                    filename = filename.replace(/\.(xls|xlsx)$/i, "") + ".xlsx";
+                }
+
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            });
         },
 
         tableToExcel: function (table, name, sheetName) {

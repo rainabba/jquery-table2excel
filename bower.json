@@ -16,6 +16,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "jquery": "2.x.x"
+    "jquery": "2.x.x",
+    "jszip": "^3.10.1"
   }
 }

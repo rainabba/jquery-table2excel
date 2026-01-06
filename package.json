@@ -22,6 +22,7 @@
     "serve": "yarn run test && ./node_modules/.bin/serve"
   },
   "dependencies": {
+    "jszip": "^3.10.1",
     "serve": "^10.1.2"
   }
 }
