@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>jQuery Boilerplate</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-		<script src="../dist/jquery.table2excel.js"></script>
+		<title>jQuery table2excel - Demo with Borders</title>
+		<script src="libs/jquery.min.js"></script>
+		<script src="libs/jszip.min.js"></script>
+		<script src="dist/jquery.table2excel.js"></script>
+		<style>
+			body { font-family: Arial, sans-serif; padding: 20px; }
+			table { border-collapse: collapse; margin: 20px 0; }
+			table td, table th { border: 1px solid #ddd; padding: 8px; }
+			table th { background-color: #4CAF50; color: white; }
+			button { margin: 10px 0; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+			button:hover { background-color: #45a049; }
+			h2 { margin-top: 30px; }
+			.info { background-color: #f0f0f0; padding: 10px; margin-bottom: 20px; border-left: 4px solid #4CAF50; }
+		</style>
 	</head>
 	<body>
+		<h1>jQuery table2excel - Demo</h1>
+		<div class="info">
+			<strong>Note:</strong> This demo showcases the new border support feature for XLSX export. 
+			When you set <code>borders: true</code>, the plugin exports to XLSX format with borders around all cells.
+		</div>
+
+		<h2>Table 1: Standard XLS Export (no borders)</h2>
 		<table class="table2excel" data-tableName="Test Table 1">
 			<thead>
 				<tr class="noExl"><td>This shouldn't get exported</td><td>This shouldn't get exported either</td></tr>
@@ -26,6 +44,7 @@
 		</table>
 		<button class="exportToExcel">Export to XLS</button>
 
+		<h2>Table 2: Standard XLS Export (no borders)</h2>
 		<table class="table2excel" data-tableName="Test Table 2">
 			<thead>
 				<tr class="noExl"><td>This shouldn't get exported</td><td>This shouldn't get exported either</td></tr>
@@ -41,6 +60,7 @@
 		</table>
 		<button class="exportToExcel">Export to XLS</button>
 		
+		<h2>Table 3: XLS Export with Color Preservation (no borders)</h2>
 		<table class="table2excel table2excel_with_colors" data-tableName="Test Table 3">
 			<thead>
 				<tr class="noExl"><td>This shouldn't get exported</td><td>This shouldn't get exported either</td></tr>
@@ -56,22 +76,50 @@
 		</table>
 		<button class="exportToExcel">Export to XLS</button>
 
+		<h2>Table 4: XLSX Export with Borders (NEW!)</h2>
+		<table class="table2excel table2excel_with_borders" data-tableName="Test Table 4">
+			<thead>
+				<tr class="noExl"><td>This shouldn't get exported</td><td>This shouldn't get exported either</td></tr>
+				<tr><th>Header 1</th><th>Header 2</th><th>Header 3</th></tr>
+			</thead>
+			<tbody>
+				<tr><td>Row 1, Col 1</td><td>Row 1, Col 2</td><td>Row 1, Col 3</td></tr>
+				<tr><td>Row 2, Col 1</td><td>Row 2, Col 2</td><td>Row 2, Col 3</td></tr>
+				<tr><td>Row 3, Col 1</td><td>Row 3, Col 2</td><td>Row 3, Col 3</td></tr>
+			</tbody>
+			<tfoot>
+				<tr><td colspan="3">This footer spans 3 cells - with borders!</td></tr>
+			</tfoot>
+		</table>
+		<button class="exportToExcel">Export to XLSX with Borders</button>
+
 		<script>
 			$(function() {
 				$(".exportToExcel").click(function(e){
 					var table = $(this).prev('.table2excel');
 					if(table && table.length){
 						var preserveColors = (table.hasClass('table2excel_with_colors') ? true : false);
-						$(table).table2excel({
+						var withBorders = (table.hasClass('table2excel_with_borders') ? true : false);
+						
+						var options = {
 							exclude: ".noExl",
 							name: "Excel Document Name",
-							filename: "myFileName" + new Date().toISOString().replace(/[\-\:\.]/g, "") + ".xls",
-							fileext: ".xls",
+							filename: "myFileName" + new Date().toISOString().replace(/[\-\:\.]/g, ""),
 							exclude_img: true,
 							exclude_links: true,
 							exclude_inputs: true,
 							preserveColors: preserveColors
-						});
+						};
+						
+						// Add borders option if requested
+						if (withBorders) {
+							options.borders = true;
+							options.fileext = ".xlsx";
+						} else {
+							options.fileext = ".xls";
+						}
+						
+						$(table).table2excel(options);
 					}
 				});
 				
