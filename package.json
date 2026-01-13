@@ -16,7 +16,7 @@
 		"grunt-contrib-concat": "^1.0.1",
 		"grunt-contrib-jshint": "^2.0.0",
 		"grunt-contrib-uglify": "^4.0.0",
-		"jquery": "^2.2.4",
+		"jquery": "^3.5.0",
 		"karma": "^6.4.3",
 		"karma-chai": "^0.1.0",
 		"karma-chrome-launcher": "^3.2.0",
