@@ -1,0 +1,345 @@
+<div id="fixture-root">
+
+	<h3>Borders Table</h3>
+	<p>Tests XLSX export with borders, row exclusion (.noExl), links, images, inputs, colspan, and tfoot.</p>
+	<table id="table-borders" class="table2excel" data-tableName="Borders Table">
+		<thead>
+			<tr class="noExl">
+				<th>ShouldSkip</th>
+				<th>AlsoSkip</th>
+			</tr>
+			<tr>
+				<th>Header 1</th>
+				<th>Header 2</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Row 1 Col 1</td>
+				<td>Row 1 Col 2</td>
+			</tr>
+			<tr>
+				<td><a href="#">Link Text</a></td>
+				<td><img src="x.png" alt="AltText"></td>
+			</tr>
+			<tr>
+				<td><input value="Input Value"></td>
+				<td>Plain Cell</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="2">Footer Text</td>
+			</tr>
+		</tfoot>
+	</table>
+	<hr />
+
+	<h3>Legacy Table</h3>
+	<p>Tests legacy XLS export path (non-XLSX format).</p>
+	<table id="table-legacy" class="table2excel" data-tableName="Legacy Table">
+		<thead>
+			<tr>
+				<th>Legacy H1</th>
+				<th>Legacy H2</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Legacy R1C1</td>
+				<td>Legacy R1C2</td>
+			</tr>
+			<tr>
+				<td>Legacy R2C1</td>
+				<td>Legacy R2C2</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Special Characters Table</h3>
+	<p>Tests XML escaping of special characters: ampersand (&amp;), less than (&lt;), greater than (&gt;), and quotes.</p>
+	<table id="table-special-chars" class="table2excel" data-tableName="Special Chars">
+		<thead>
+			<tr>
+				<th>Description</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Ampersand</td>
+				<td>Tom &amp; Jerry</td>
+			</tr>
+			<tr>
+				<td>Less Than</td>
+				<td>5 &lt; 10</td>
+			</tr>
+			<tr>
+				<td>Greater Than</td>
+				<td>10 &gt; 5</td>
+			</tr>
+			<tr>
+				<td>Quotes</td>
+				<td>Say "Hello" &amp; 'Hi'</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Merged Cells Table</h3>
+	<p>Tests rowspan and colspan attribute handling for merged cells.</p>
+	<table id="table-merged-cells" class="table2excel" data-tableName="Merged Cells">
+		<thead>
+			<tr>
+				<th>Col A</th>
+				<th>Col B</th>
+				<th>Col C</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td rowspan="2">Spans 2 Rows</td>
+				<td>B1</td>
+				<td>C1</td>
+			</tr>
+			<tr>
+				<td>B2</td>
+				<td>C2</td>
+			</tr>
+			<tr>
+				<td colspan="2">Spans 2 Cols</td>
+				<td>C3</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Colors Table</h3>
+	<p>Tests the preserveColors option for background and text color preservation in XLS format.</p>
+	<table id="table-colors" class="table2excel" data-tableName="Colors Table">
+		<thead>
+			<tr>
+				<th>Item</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Task 1</td>
+				<td style="background-color: #00ff00; color: #000000;">Complete</td>
+			</tr>
+			<tr>
+				<td>Task 2</td>
+				<td style="background-color: #ff0000; color: #ffffff;">Failed</td>
+			</tr>
+			<tr>
+				<td>Task 3</td>
+				<td style="background-color: rgb(255, 255, 0);">Pending</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Images Table</h3>
+	<p>Tests the excludeImages option - images are replaced with their alt text.</p>
+	<table id="table-images" class="table2excel" data-tableName="Images Table">
+		<thead>
+			<tr>
+				<th>Product</th>
+				<th>Image</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Widget A</td>
+				<td><img src="widget-a.png" alt="Widget A Photo"></td>
+			</tr>
+			<tr>
+				<td>Widget B</td>
+				<td><img src="widget-b.png"></td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Links Table</h3>
+	<p>Tests the excludeLinks option - anchor tags are removed but text content is preserved.</p>
+	<table id="table-links" class="table2excel" data-tableName="Links Table">
+		<thead>
+			<tr>
+				<th>Site</th>
+				<th>URL</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>GitHub</td>
+				<td><a href="https://github.com">GitHub Link</a></td>
+			</tr>
+			<tr>
+				<td>Google</td>
+				<td><a href="https://google.com">Google Link</a></td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Inputs Table</h3>
+	<p>Tests the excludeInputs option - input elements are replaced with their values.</p>
+	<table id="table-inputs" class="table2excel" data-tableName="Inputs Table">
+		<thead>
+			<tr>
+				<th>Field</th>
+				<th>Value</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Name</td>
+				<td><input type="text" value="John Doe"></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td><input type="email" value="john@example.com"></td>
+			</tr>
+			<tr>
+				<td>Empty</td>
+				<td><input type="text" value=""></td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Multi-Table Export (Table 1 of 2)</h3>
+	<p>Tests exporting multiple tables - first table in a multi-table selection.</p>
+	<table id="table-multi-1" class="multi-table" data-tableName="Sheet One">
+		<thead>
+			<tr>
+				<th>Multi 1 Header</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Multi 1 Data</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Multi-Table Export (Table 2 of 2)</h3>
+	<p>Tests exporting multiple tables - second table in a multi-table selection.</p>
+	<table id="table-multi-2" class="multi-table" data-tableName="Sheet Two">
+		<thead>
+			<tr>
+				<th>Multi 2 Header</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Multi 2 Data</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Custom Sheet Name Table</h3>
+	<p>Tests the sheetName option and data-tableName attribute for custom Excel sheet naming.</p>
+	<table id="table-sheetname" class="table2excel" data-tableName="CustomSheetName">
+		<thead>
+			<tr>
+				<th>Custom Sheet</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Sheet Data</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Many Columns Table</h3>
+	<p>Tests column letter generation for tables with 27+ columns (A-Z, then AA, AB, etc.).</p>
+	<table id="table-many-columns" class="table2excel" data-tableName="Many Columns">
+		<thead>
+			<tr>
+				<th>C1</th>
+				<th>C2</th>
+				<th>C3</th>
+				<th>C4</th>
+				<th>C5</th>
+				<th>C6</th>
+				<th>C7</th>
+				<th>C8</th>
+				<th>C9</th>
+				<th>C10</th>
+				<th>C11</th>
+				<th>C12</th>
+				<th>C13</th>
+				<th>C14</th>
+				<th>C15</th>
+				<th>C16</th>
+				<th>C17</th>
+				<th>C18</th>
+				<th>C19</th>
+				<th>C20</th>
+				<th>C21</th>
+				<th>C22</th>
+				<th>C23</th>
+				<th>C24</th>
+				<th>C25</th>
+				<th>C26</th>
+				<th>C27</th>
+				<th>C28</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>D1</td>
+				<td>D2</td>
+				<td>D3</td>
+				<td>D4</td>
+				<td>D5</td>
+				<td>D6</td>
+				<td>D7</td>
+				<td>D8</td>
+				<td>D9</td>
+				<td>D10</td>
+				<td>D11</td>
+				<td>D12</td>
+				<td>D13</td>
+				<td>D14</td>
+				<td>D15</td>
+				<td>D16</td>
+				<td>D17</td>
+				<td>D18</td>
+				<td>D19</td>
+				<td>D20</td>
+				<td>D21</td>
+				<td>D22</td>
+				<td>D23</td>
+				<td>D24</td>
+				<td>D25</td>
+				<td>D26</td>
+				<td>D27</td>
+				<td>D28</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr />
+
+	<h3>Empty Table</h3>
+	<p>Tests edge case handling for tables with headers but no body rows.</p>
+	<table id="table-empty" class="table2excel" data-tableName="Empty Table">
+		<thead>
+			<tr>
+				<th>Empty Header</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	<hr />
+
+</div>

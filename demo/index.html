@@ -4,7 +4,7 @@
 		<title>jQuery table2excel - Demo with Borders</title>
 		<script src="libs/jquery.min.js"></script>
 		<script src="libs/jszip.min.js"></script>
-		<script src="dist/jquery.table2excel.js"></script>
+		<script src="../dist/jquery.table2excel.js"></script>
 		<style>
 			body { font-family: Arial, sans-serif; padding: 20px; }
 			table { border-collapse: collapse; margin: 20px 0; }
@@ -32,7 +32,7 @@
 			<tbody>
 				<tr>
 					<td style="background-color: blue; color: purple;">data1a with a <a href="#">link one</a> and <a href="#">link two</a> and color won't be exported.</td>
-					<td>data1b with a <img src="image_file.jpg" alt="image">.</td></tr>
+					<td>data1b with a <img src="image.png" alt="image" width="50" height="60"/>.</td></tr>
 				<tr>
 					<td>data2a with a <input tyle="text" value="text value">.</td>
 					<td>data2b with a <input tyle="text" value="second text value">.</td>
@@ -77,10 +77,10 @@
 		<button class="exportToExcel">Export to XLS</button>
 
 		<h2>Table 4: XLSX Export with Borders (NEW!)</h2>
-		<table class="table2excel table2excel_with_borders" data-tableName="Test Table 4">
+		<table class="table2excel table2excel_with_borders table2excel_with_colors" data-tableName="Test Table 4">
 			<thead>
 				<tr class="noExl"><td>This shouldn't get exported</td><td>This shouldn't get exported either</td></tr>
-				<tr><th>Header 1</th><th>Header 2</th><th>Header 3</th></tr>
+				<tr><th style="background-color: green;">Header 1</th><th style="background-color: green;">Header 2</th><th style="background-color: green;">Header 3</th></tr>
 			</thead>
 			<tbody>
 				<tr><td>Row 1, Col 1</td><td>Row 1, Col 2</td><td>Row 1, Col 3</td></tr>

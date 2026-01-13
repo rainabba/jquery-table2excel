@@ -203,10 +203,10 @@
                         
                         // Loop through each TH and TD
                         $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
-                            
+
                             // Reset for this column
                             additionalStyles = "";
-                            
+
                             // Preserve background and text colors on the row
                             if(e.settings.preserveColors){
                                 compStyle = getComputedStyle(q);
@@ -220,10 +220,13 @@
                                 flag: $(q).find(e.settings.exclude)
                             };
 
+                            // Preserve original element type (th or td)
+                            var tagName = q.tagName.toLowerCase();
+
                             if( rc.flag.length > 0 ) {
                                 tempRows += "<td> </td>"; // exclude it!!
                             } else {
-                                tempRows += "<td";
+                                tempRows += "<" + tagName;
                                 if( rc.rows > 0) {
                                     tempRows += " rowspan='" + rc.rows + "' ";
                                 }
@@ -233,7 +236,7 @@
                                 if(additionalStyles){
                                     tempRows += " style='" + additionalStyles + "'";
                                 }
-                                tempRows += ">" + $(q).html() + "</td>";
+                                tempRows += ">" + $(q).html() + "</" + tagName + ">";
                             }
                         });
 
