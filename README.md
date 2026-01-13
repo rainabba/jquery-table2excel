@@ -40,13 +40,43 @@ Include jQuery and table2excel plugin:
 
 
 ## Using the plugin
+
+### Basic Usage (Legacy XLS Format)
 ```javascript
-$("#yourHtmTable").table2excel({
+$("#yourHtmlTable").table2excel({
     exclude: ".excludeThisClass",
     name: "Worksheet Name",
     filename: "SomeFile.xls", // do include extension
     preserveColors: false // set to true if you want background colors and font colors preserved
 });
+```
+
+### NEW: XLSX Export with Borders
+```javascript
+$("#yourHtmlTable").table2excel({
+    exclude: ".excludeThisClass",
+    name: "Worksheet Name",
+    filename: "SomeFile.xlsx",
+    borders: true // Enable borders - automatically exports to XLSX format
+});
+```
+
+### Available Options
+- **exclude** (string, default: ".noExl"): CSS selector for elements to exclude from export
+- **name** (string, default: "Table2Excel"): Name of the Excel worksheet
+- **filename** (string, default: "table2excel"): Name of the downloaded file
+- **fileext** (string, default: ".xls"): File extension (.xls or .xlsx)
+- **exclude_img** (boolean, default: true): Exclude images from export
+- **exclude_links** (boolean, default: true): Exclude links from export
+- **exclude_inputs** (boolean, default: true): Exclude input elements from export
+- **preserveColors** (boolean, default: false): Preserve background and text colors (XLS only)
+- **borders** (boolean, default: false): Add borders to all cells (forces XLSX format)
+- **excelFormat** (string, default: "xls"): Choose between "xls" or "xlsx" format
+
+**Note:** The `borders` option requires the JSZip library to be loaded on the page. Include it before the table2excel plugin:
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="jquery.table2excel.js"></script>
 ```
 
 #### [demo/](https://github.com/rainabba/jquery-table2excel/tree/master/demo)
