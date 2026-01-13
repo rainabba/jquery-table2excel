@@ -31,6 +31,6 @@
 	},
 	"dependencies": {
 		"jszip": "^3.10.1",
-		"serve": "^10.1.2"
+		"serve": "^14.2.5"
 	}
 }
